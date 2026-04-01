@@ -1,0 +1,2 @@
+- [User Profile](user_profile.md) — Nashmin: new to Flutter, prefers elegant UX, wants plans first
+- [JustLens Project](project_justlens.md) — Flutter doc scanner app, Android first, no ads, plans in .claude/plan/
