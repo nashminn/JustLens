@@ -32,8 +32,8 @@
 ### Local Storage & File Management
 - **`path_provider`** — Access to app-specific directories
 - **`file_picker`** or **`saf_util`** — Let user pick save location via Storage Access Framework (Android) / document picker
-- **`sqflite`** or **`isar`** — Local database for scan metadata (name, date, page count, export history)
-  - Leaning **Isar** — fast, Flutter-native, no native dependencies, good for this use case
+- **`drift`** + **`sqflite`** — Local database for scan metadata (name, date, page count, export history)
+  - Isar 3.x was abandoned and incompatible with current AGP; drift is the best-maintained alternative
 
 ### State Management
 - **`riverpod`** — Clean, testable, scales well without boilerplate

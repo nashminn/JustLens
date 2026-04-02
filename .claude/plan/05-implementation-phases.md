@@ -1,15 +1,16 @@
 # JustLens — Implementation Phases
 
-## Phase 0: Project Setup
-- [ ] Initialize Flutter project (`flutter create --org com.justlens justlens`)
-- [ ] Configure min SDK (Android API 24)
-- [ ] Add core dependencies (riverpod, go_router, isar, material 3 theme)
-- [ ] Set up project structure (feature-first folders)
-- [ ] Configure linting rules
-- [ ] Basic app shell: MaterialApp with theme, router, empty home screen
-- [ ] Android permissions setup (camera, storage) in manifest
+## Phase 0: Project Setup ✅
+- [x] Initialize Flutter project (`flutter create --org com.justlens --platforms android .`)
+- [x] Configure min SDK (Android API 24)
+- [x] Add core dependencies (flutter_riverpod, go_router, flex_color_scheme, camera, image, permission_handler, flutter_animate)
+  - Note: Isar removed — 3.x is abandoned and incompatible with current AGP (namespace error). Will use `drift` + `sqflite` in Phase 6 instead.
+- [x] Set up project structure (feature-first folders under lib/)
+- [x] Configure linting rules (analysis_options.yaml)
+- [x] Basic app shell: MaterialApp.router with Material 3 theme (flex_color_scheme), GoRouter, empty home screen, settings screen stub
+- [x] Android permissions setup (camera, storage r/w for API 24-32, READ_MEDIA_IMAGES for API 33+)
 
-**Milestone:** App builds and runs with empty home screen + routing skeleton
+**Milestone:** App builds and runs with empty home screen + routing skeleton ✅
 
 ---
 
