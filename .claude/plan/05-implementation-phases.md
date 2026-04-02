@@ -14,16 +14,16 @@
 
 ---
 
-## Phase 1: Camera & Basic Capture
-- [ ] Camera screen with viewfinder using `camera` plugin
-- [ ] Capture button — take a photo, save to temp directory
-- [ ] Flash toggle (off / on / auto)
-- [ ] Single vs batch mode toggle
-- [ ] Batch mode: capture multiple, show count, "Done" to proceed
-- [ ] Import from gallery option
-- [ ] Basic navigation: Home → Scanner → (captured images list)
+## Phase 1: Camera & Basic Capture ✅
+- [x] Camera screen with viewfinder using `camera` plugin
+- [x] Capture button — take a photo, save to temp directory (XFile temp path)
+- [x] Flash toggle (off / auto / on — cycles on tap)
+- [x] Single vs batch mode toggle
+- [x] Batch mode: capture multiple, show page count, "Done" to proceed
+- [x] Import from gallery option (`image_picker`)
+- [x] Basic navigation: Home → Scanner → Review screen (stub)
 
-**Milestone:** Can open camera, take one or more photos, see them in a list
+**Milestone:** Can open camera, take one or more photos, see them in a list ✅
 
 ---
 
