@@ -20,9 +20,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: const _EmptyState(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // TODO: navigate to scanner in Phase 1
-        },
+        onPressed: () => context.push(AppRoutes.scanner),
         icon: const Icon(Icons.document_scanner_outlined),
         label: const Text('Scan'),
       ),

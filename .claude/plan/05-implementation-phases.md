@@ -71,7 +71,17 @@
 
 ---
 
-## Phase 5: Export — Images & PDF with OCR
+## Phase 5: Save & Export — Images & PDF with OCR
+
+### 5a: Quick Save
+- [ ] Save button on review screen
+- [ ] Save all selected pages to app storage using default settings (PDF + OCR)
+- [ ] Auto-generated name (Scan_YYYY-MM-DD_HHMMSS)
+- [ ] Progress indicator while saving
+- [ ] Success snackbar with "Open" action
+- [ ] Saved scan appears in home screen history
+
+### 5b: Full Export
 - [ ] Export bottom sheet UI (format, OCR toggle, save location, name)
 - [ ] Image export: save selected pages as JPEG/PNG files
 - [ ] PDF export: combine selected pages into single PDF
@@ -81,9 +91,9 @@
 - [ ] Save to app storage (internal directory)
 - [ ] Save to user-selected location (Storage Access Framework)
 - [ ] Naming: auto-generated with user rename option
-- [ ] Success screen with "Open" / "Share" actions
+- [ ] Success confirmation with "Open" / "Share" actions
 
-**Milestone:** Documents can be exported as images or searchable PDFs to chosen location
+**Milestone:** Documents can be saved instantly (quick save) or exported with full format/location control
 
 ---
 

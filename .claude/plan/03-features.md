@@ -70,12 +70,26 @@
 - **Add more:** Append additional pages to the batch
 - Tap a page → opens editor (F3) for that page
 - Page count indicator
-- "Export" button (prominent, bottom of screen)
+- Two bottom actions:
+  - **Save** — quick save to app storage with default settings (no choices needed)
+  - **Export** — full sheet for format, location, OCR, naming options
 
 ---
 
-## F5: Export
-**Purpose:** Save scanned documents as images or PDF.
+## F5a: Quick Save
+**Purpose:** One-tap save to app storage with no decisions required.
+
+### Requirements
+- Saves all selected pages to app internal storage immediately
+- Uses default settings: PDF format, OCR on, auto-generated name ("Scan_YYYY-MM-DD_HHMMSS")
+- Progress indicator while saving
+- Success snackbar with "Open" quick action
+- Scan appears in home screen history
+
+---
+
+## F5b: Export
+**Purpose:** Full-control export for when the user wants to choose format, location, or name.
 
 ### Requirements
 - **Format selection:**
@@ -92,8 +106,7 @@
   - App internal storage (default — accessible from home screen)
   - Device shared storage (Documents/Downloads — user picks via system picker)
 - **Naming:**
-  - Auto-generated name: "Scan_YYYY-MM-DD_HHMMSS"
-  - User can rename before saving
+  - Auto-generated name, user can rename before saving
 - Progress indicator for PDF generation + OCR (can take a few seconds per page)
 - Success confirmation with "Open" and "Share" quick actions
 
@@ -109,7 +122,8 @@
 
 ### Requirements
 - **Default save location:** App storage / Shared storage
-- **Default export format:** Images / PDF
+- **Default save format:** Images / PDF (used by quick Save)
+- **Default export format:** Images / PDF (pre-fills Export sheet)
 - **OCR default:** On / Off
 - **Image quality default:** slider
 - **Flash default:** Off / On / Auto
