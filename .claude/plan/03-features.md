@@ -71,49 +71,56 @@
 - Tap a page → opens editor (F3) for that page
 - Page count indicator
 - Two bottom actions:
-  - **Save** — quick save to app storage with default settings (no choices needed)
-  - **Export** — full sheet for format, location, OCR, naming options
+  - **Save** — prompts user to name the scan (default = timestamp), then saves pages as images to app storage and adds to home library
+  - **Export** — full sheet for format (PDF/images), location, OCR, and name options
 
 ---
 
-## F5a: Quick Save
-**Purpose:** One-tap save to app storage with no decisions required.
+## F5a: Save
+**Purpose:** Save the scan to the app's internal library as images.
 
 ### Requirements
-- Saves all selected pages to app internal storage immediately
-- Uses default settings: PDF format, OCR on, auto-generated name ("Scan_YYYY-MM-DD_HHMMSS")
-- Progress indicator while saving
+- Tapping Save shows a rename prompt with a pre-filled default name ("Scan_YYYY-MM-DD_HHMMSS")
+- User can accept the default or type a custom name
+- On confirm: pages are saved as JPEG images to app internal storage
+- A scan record is created in the local DB (name, date, page count, image paths, first-page thumbnail)
+- Scan immediately appears in home screen library with thumbnail + name
+- Progress indicator while writing images
 - Success snackbar with "Open" quick action
-- Scan appears in home screen history
+
+### Technical Notes
+- Internal storage path: `<app_documents>/scans/<scan_id>/page_01.jpg`, `page_02.jpg`, etc.
+- Thumbnail = first page image (scaled down, stored alongside pages)
+- This is the canonical representation — Export always works from these saved images
 
 ---
 
 ## F5b: Export
-**Purpose:** Full-control export for when the user wants to choose format, location, or name.
+**Purpose:** Export the scan as a PDF or image files to a chosen location, with full control over format and quality.
 
 ### Requirements
+- Can be triggered from the review screen (after scanning) or from the home screen (re-export any saved scan)
 - **Format selection:**
+  - Single PDF — all selected pages combined, one photo per page
   - Individual images (JPEG or PNG — let user pick, default JPEG)
-  - Single PDF (all selected pages combined)
 - **PDF options:**
   - OCR enabled by default (text-searchable PDF)
-  - Toggle OCR off if user wants image-only PDF (faster export)
+  - Toggle OCR off for image-only PDF (faster)
   - PDF page size: auto-fit to document dimensions
 - **Image options:**
   - Quality slider (for JPEG compression)
-  - Resolution: Original or reduced
 - **Save location:**
-  - App internal storage (default — accessible from home screen)
-  - Device shared storage (Documents/Downloads — user picks via system picker)
+  - Device shared storage (Downloads/Documents — user picks via system file picker)
 - **Naming:**
-  - Auto-generated name, user can rename before saving
-- Progress indicator for PDF generation + OCR (can take a few seconds per page)
+  - Pre-filled with scan name, user can change before exporting
+- Progress indicator during PDF generation + OCR
 - Success confirmation with "Open" and "Share" quick actions
 
 ### Technical Notes
+- Always reads from internally saved images (F5a must have run first, or export triggers an implicit save)
 - OCR runs per-page using ML Kit text recognition
-- PDF built with `pdf` package: image layer + invisible text layer positioned to match
-- For save-to-shared-storage: use Storage Access Framework on Android (scoped storage compliant)
+- PDF built with `pdf` package: image layer + invisible text layer at matched positions
+- Storage Access Framework for writing to shared storage on Android
 
 ---
 
@@ -121,9 +128,8 @@
 **Purpose:** App-level preferences.
 
 ### Requirements
-- **Default save location:** App storage / Shared storage
-- **Default save format:** Images / PDF (used by quick Save)
-- **Default export format:** Images / PDF (pre-fills Export sheet)
+- **Default export format:** PDF / Images (pre-fills Export sheet)
+- **OCR default:** On / Off (applies to Export)
 - **OCR default:** On / Off
 - **Image quality default:** slider
 - **Flash default:** Off / On / Auto
@@ -139,10 +145,12 @@
 
 ### Requirements
 - All scans stored in local DB with metadata
-- Each scan record: id, name, date, page count, thumbnail path, file paths, export history
-- Re-export: open any past scan and export again with different settings
-- Delete scan: removes images + DB entry, confirms with dialog
-- Rename scan
+- Each scan record: id, name, date, page count, image paths, thumbnail path (first page)
+- Home screen thumbnail = first page image of the scan
+- Tap scan → opens review showing all pages of that scan
+- Re-export: tap Export from any saved scan's review screen
+- Delete scan: removes images from storage + DB entry, confirms with dialog
+- Rename scan: from home screen (long-press) or review screen app bar
 - Sort by: date (default), name
 
 ---

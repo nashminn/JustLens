@@ -73,27 +73,28 @@
 
 ## Phase 5: Save & Export — Images & PDF with OCR
 
-### 5a: Quick Save
-- [ ] Save button on review screen
-- [ ] Save all selected pages to app storage using default settings (PDF + OCR)
-- [ ] Auto-generated name (Scan_YYYY-MM-DD_HHMMSS)
-- [ ] Progress indicator while saving
+### 5a: Save to Library
+- [ ] Rename prompt on Save: dialog with pre-filled timestamp name, user can edit
+- [ ] Write pages as JPEG images to `<app_documents>/scans/<scan_id>/page_XX.jpg`
+- [ ] Generate thumbnail (first page, scaled down)
+- [ ] Create scan record in local DB (id, name, date, page count, image paths, thumbnail path)
+- [ ] Progress indicator while writing
 - [ ] Success snackbar with "Open" action
-- [ ] Saved scan appears in home screen history
+- [ ] Scan appears immediately in home screen library with thumbnail + name
 
-### 5b: Full Export
+### 5b: Export to PDF / Images
 - [ ] Export bottom sheet UI (format, OCR toggle, save location, name)
-- [ ] Image export: save selected pages as JPEG/PNG files
-- [ ] PDF export: combine selected pages into single PDF
+- [ ] Always reads from internally saved images (triggers implicit save if not yet saved)
+- [ ] PDF export: combine pages into single PDF, one photo per page
 - [ ] OCR integration using ML Kit text recognition
-- [ ] Searchable PDF: overlay invisible text layer on image pages
-- [ ] Progress indicator during export
-- [ ] Save to app storage (internal directory)
-- [ ] Save to user-selected location (Storage Access Framework)
-- [ ] Naming: auto-generated with user rename option
+- [ ] Searchable PDF: invisible text layer overlaid at matched bounding box positions
+- [ ] Image export: write selected pages as JPEG/PNG to chosen location
+- [ ] Save to device shared storage via Storage Access Framework
+- [ ] Progress indicator during PDF generation + OCR
 - [ ] Success confirmation with "Open" / "Share" actions
+- [ ] Re-export available from home screen on any saved scan
 
-**Milestone:** Documents can be saved instantly (quick save) or exported with full format/location control
+**Milestone:** Scans saved as images in app library; can be exported as searchable PDF or image files
 
 ---
 
