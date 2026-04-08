@@ -31,7 +31,59 @@ class EditSessionNotifier extends Notifier<Map<int, EditParamsHistory>> {
     state = {...state, index: h.redo()};
   }
 
+  /// Remove edit history for [index] and shift all higher indices down.
+  void removePage(int index, int pageCount) {
+    final list = List<EditParamsHistory?>.generate(pageCount, (i) => state[i]);
+    list.removeAt(index);
+    state = _listToMap(list);
+  }
+
+  /// Clears the edit history for [index] (used after retake).
+  void replacePage(int index) {
+    final newState = Map<int, EditParamsHistory>.from(state)..remove(index);
+    state = newState;
+  }
+
+  /// Reorder edit histories to match a page reorder operation.
+  void reorderPages(int oldIndex, int newIndex, int pageCount) {
+    final list = List<EditParamsHistory?>.generate(pageCount, (i) => state[i]);
+    final item = list.removeAt(oldIndex);
+    list.insert(newIndex, item);
+    state = _listToMap(list);
+  }
+
+  /// Propagate [sourceIndex]'s filter and/or adjustments to all other pages.
+  void applyToAll(
+    int sourceIndex,
+    int pageCount, {
+    bool applyFilter = false,
+    bool applyAdjustments = false,
+  }) {
+    final source = paramsFor(sourceIndex);
+    final newState = Map<int, EditParamsHistory>.from(state);
+    for (var i = 0; i < pageCount; i++) {
+      if (i == sourceIndex) continue;
+      final current = paramsFor(i);
+      final updated = current.copyWith(
+        filter: applyFilter ? source.filter : null,
+        brightness: applyAdjustments ? source.brightness : null,
+        contrast: applyAdjustments ? source.contrast : null,
+      );
+      newState[i] = _historyFor(i).push(updated);
+    }
+    state = newState;
+  }
+
   void clear() => state = {};
+
+  static Map<int, EditParamsHistory> _listToMap(
+      List<EditParamsHistory?> list) {
+    final map = <int, EditParamsHistory>{};
+    for (var i = 0; i < list.length; i++) {
+      if (list[i] != null) map[i] = list[i]!;
+    }
+    return map;
+  }
 }
 
 final editSessionProvider =

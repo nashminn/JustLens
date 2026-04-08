@@ -10,6 +10,8 @@ import 'package:justlens/features/editor/providers/edit_session_provider.dart';
 import 'package:justlens/features/editor/services/image_processor.dart';
 import 'package:justlens/features/scanner/providers/scan_session_provider.dart';
 
+enum _OverflowAction { applyFilterAll, applyAdjustmentsAll }
+
 class EditorScreen extends ConsumerStatefulWidget {
   const EditorScreen({super.key, required this.pageIndex});
 
@@ -163,6 +165,33 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
     _refreshPreview(immediate: true);
   }
 
+  void _onOverflow(_OverflowAction action) {
+    final pageCount = ref.read(scanSessionProvider).length;
+    switch (action) {
+      case _OverflowAction.applyFilterAll:
+        ref.read(editSessionProvider.notifier).applyToAll(
+              widget.pageIndex,
+              pageCount,
+              applyFilter: true,
+            );
+      case _OverflowAction.applyAdjustmentsAll:
+        ref.read(editSessionProvider.notifier).applyToAll(
+              widget.pageIndex,
+              pageCount,
+              applyAdjustments: true,
+            );
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(action == _OverflowAction.applyFilterAll
+            ? 'Filter applied to all pages'
+            : 'Brightness & contrast applied to all pages'),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   // ── Build ────────────────────────────────────────────────────────────────
 
   @override
@@ -188,6 +217,19 @@ class _EditorScreenState extends ConsumerState<EditorScreen> {
             icon: const Icon(Icons.redo),
             tooltip: 'Redo',
             onPressed: canRedo ? _redo : null,
+          ),
+          PopupMenuButton<_OverflowAction>(
+            onSelected: _onOverflow,
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: _OverflowAction.applyFilterAll,
+                child: Text('Apply filter to all pages'),
+              ),
+              PopupMenuItem(
+                value: _OverflowAction.applyAdjustmentsAll,
+                child: Text('Apply brightness & contrast to all'),
+              ),
+            ],
           ),
           IconButton(
             icon: const Icon(Icons.check),

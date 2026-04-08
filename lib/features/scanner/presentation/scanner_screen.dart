@@ -7,9 +7,16 @@ import 'package:justlens/features/editor/providers/edit_session_provider.dart';
 import 'package:justlens/features/scanner/providers/scan_session_provider.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
-  const ScannerScreen({super.key, this.galleryMode = false});
+  const ScannerScreen({
+    super.key,
+    this.galleryMode = false,
+    this.retakeIndex,
+  });
 
   final bool galleryMode;
+
+  /// When set, the scanner replaces only this page index rather than appending.
+  final int? retakeIndex;
 
   @override
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
@@ -18,12 +25,16 @@ class ScannerScreen extends ConsumerStatefulWidget {
 class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   DocumentScanner? _scanner;
 
+  bool get _isRetake => widget.retakeIndex != null;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(scanSessionProvider.notifier).clear();
-      ref.read(editSessionProvider.notifier).clear();
+      if (!_isRetake) {
+        ref.read(scanSessionProvider.notifier).clear();
+        ref.read(editSessionProvider.notifier).clear();
+      }
       _startScan();
     });
   }
@@ -40,7 +51,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
         documentFormat: DocumentFormat.jpeg,
         mode: ScannerMode.full,
         isGalleryImport: widget.galleryMode,
-        pageLimit: 100, // effectively uncapped
+        pageLimit: _isRetake ? 1 : 100,
       ),
     );
 
@@ -48,26 +59,30 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       final result = await _scanner!.scanDocument();
       if (!mounted) return;
 
-      for (final path in result.images) {
-        ref.read(scanSessionProvider.notifier).addPage(path);
-      }
-
       if (result.images.isNotEmpty) {
-        context.pushReplacement('/review');
+        if (_isRetake) {
+          ref.read(scanSessionProvider.notifier)
+              .replacePage(widget.retakeIndex!, result.images.first);
+          ref.read(editSessionProvider.notifier)
+              .replacePage(widget.retakeIndex!);
+          context.pop(); // back to review
+        } else {
+          for (final path in result.images) {
+            ref.read(scanSessionProvider.notifier).addPage(path);
+          }
+          context.pushReplacement('/review');
+        }
       } else {
-        // User cancelled without accepting any pages
         context.pop();
       }
     } on PlatformException catch (e) {
       if (!mounted) return;
 
-      // Code 'canceled' means the user dismissed the ML Kit Activity
       if (e.code == 'canceled') {
         context.pop();
         return;
       }
 
-      // Play Services unavailable or other hard failure
       final message = e.code == 'google-play-services-not-available'
           ? 'Google Play Services is required for document scanning but is not available on this device.'
           : 'Scanning failed: ${e.message ?? 'unknown error'}';
@@ -96,7 +111,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Transparent launcher — visible only briefly while ML Kit Activity opens.
     return const Scaffold(
       backgroundColor: Colors.black,
       body: Center(

@@ -25,7 +25,8 @@ final appRouter = GoRouter(
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>?;
         final galleryMode = extra?['gallery'] as bool? ?? false;
-        return ScannerScreen(galleryMode: galleryMode);
+        final retakeIndex = extra?['retake'] as int?;
+        return ScannerScreen(galleryMode: galleryMode, retakeIndex: retakeIndex);
       },
     ),
     GoRoute(

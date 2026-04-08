@@ -15,6 +15,19 @@ class ScanSessionNotifier extends Notifier<List<String>> {
     state = updated;
   }
 
+  void replacePage(int index, String path) {
+    final updated = [...state];
+    updated[index] = path;
+    state = updated;
+  }
+
+  void reorderPages(int oldIndex, int newIndex) {
+    final list = [...state];
+    final item = list.removeAt(oldIndex);
+    list.insert(newIndex, item);
+    state = list;
+  }
+
   void clear() => state = [];
 }
 

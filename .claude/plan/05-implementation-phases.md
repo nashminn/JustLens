@@ -65,17 +65,25 @@
 
 ---
 
-## Phase 4: Review & Page Management
-- [ ] Review screen showing all captured pages as thumbnail strip
-- [ ] Tap thumbnail → large preview
-- [ ] Drag-and-drop reorder
-- [ ] Select/deselect pages (checkboxes)
-- [ ] Delete individual pages
-- [ ] Retake a page (replace with new capture)
-- [ ] Add more pages to batch
-- [ ] Tap page → opens editor
+## Phase 4: Review & Page Management ✅
+- [x] Review screen showing all captured pages as vertical ReorderableListView
+- [x] Drag-and-drop reorder (explicit drag handle; long-press reserved for select)
+- [x] Select/deselect pages (long-press enters select mode; tap toggles checkboxes)
+- [x] Delete individual pages (delete icon per card)
+- [x] Delete selected pages (AppBar action in select mode)
+- [x] Retake a page (opens ML Kit in single-page mode; replaces that index)
+- [x] Add more pages to batch (AppBar icon → scanner appends)
+- [x] Tap page → opens editor (existing behaviour preserved)
+- [x] Apply filter / adjustments to all pages (overflow menu in editor)
+- [x] scan_session_provider: added reorderPages, replacePage
+- [x] edit_session_provider: added reorderPages, removePage, replacePage, applyToAll
 
-**Milestone:** Full page management before export
+**Milestone:** Full page management before export ✅
+
+**Implementation notes:**
+- ReorderableListView (vertical, built-in Flutter) with buildDefaultDragHandles: false
+- Retake uses extra: {'retake': index}; scanner uses pageLimit: 1 and calls replacePage
+- Edit session keys are remapped on every reorder/delete to stay in sync with scan session
 
 ---
 
