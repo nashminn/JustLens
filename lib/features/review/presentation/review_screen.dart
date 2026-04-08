@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:justlens/features/scanner/providers/scan_session_provider.dart';
 
 class ReviewScreen extends ConsumerWidget {
@@ -26,11 +27,37 @@ class ReviewScreen extends ConsumerWidget {
               ),
               itemCount: pages.length,
               itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.file(
-                    File(pages[index]),
-                    fit: BoxFit.cover,
+                return GestureDetector(
+                  onTap: () => context.push('/editor/$index'),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        Image.file(
+                          File(pages[index]),
+                          fit: BoxFit.cover,
+                        ),
+                        // Page number badge
+                        Positioned(
+                          bottom: 6,
+                          right: 6,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 7, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '${index + 1}',
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 11),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

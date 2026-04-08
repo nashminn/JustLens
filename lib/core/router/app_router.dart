@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:justlens/features/editor/presentation/editor_screen.dart';
 import 'package:justlens/features/home/presentation/home_screen.dart';
 import 'package:justlens/features/review/presentation/review_screen.dart';
 import 'package:justlens/features/scanner/presentation/scanner_screen.dart';
@@ -9,6 +10,7 @@ abstract final class AppRoutes {
   static const scanner = '/scanner';
   static const review = '/review';
   static const settings = '/settings';
+  static const editor = '/editor'; // + /:index
 }
 
 final appRouter = GoRouter(
@@ -29,6 +31,13 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.review,
       builder: (context, state) => const ReviewScreen(),
+    ),
+    GoRoute(
+      path: '/editor/:index',
+      builder: (context, state) {
+        final index = int.parse(state.pathParameters['index']!);
+        return EditorScreen(pageIndex: index);
+      },
     ),
     GoRoute(
       path: AppRoutes.settings,

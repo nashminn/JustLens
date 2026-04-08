@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_document_scanner/google_mlkit_document_scanner.dart';
+import 'package:justlens/features/editor/providers/edit_session_provider.dart';
 import 'package:justlens/features/scanner/providers/scan_session_provider.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
@@ -22,6 +23,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(scanSessionProvider.notifier).clear();
+      ref.read(editSessionProvider.notifier).clear();
       _startScan();
     });
   }
