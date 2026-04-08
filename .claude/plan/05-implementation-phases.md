@@ -27,18 +27,26 @@
 
 ---
 
-## Phase 2: Edge Detection & Perspective Correction
-- [ ] Evaluate ML Kit Document Scanner API vs custom OpenCV approach
-  - Prototype both, decide based on UX control and quality
-- [ ] Real-time edge detection overlay on camera viewfinder
-- [ ] Auto-crop on capture based on detected edges
-- [ ] Manual 4-corner crop adjustment (draggable handles)
-- [ ] Perspective correction (de-skew)
-- [ ] Auto-capture option (fires when document is steady + edges stable)
+## Phase 2: Edge Detection & Perspective Correction ✅
+- [x] Evaluate ML Kit Document Scanner API vs custom OpenCV approach
+  - **Decision: ML Kit Document Scanner chosen.** Superior quality, handles all Phase 2
+    features (real-time edge overlay, perspective correction, 4-corner adjust, auto-capture)
+    with minimal code. Custom OpenCV would add ~30MB and significant complexity.
+- [x] Real-time edge detection overlay on camera viewfinder (ML Kit built-in)
+- [x] Auto-crop on capture based on detected edges (ML Kit built-in)
+- [x] Manual 4-corner crop adjustment with draggable handles (ScannerMode.full)
+- [x] Perspective correction / de-skew (ML Kit built-in)
+- [x] Auto-capture when document is steady + edges stable (ML Kit built-in)
+- [x] Gallery import upgraded: ML Kit also applies edge detection + correction to gallery photos
 
-**Milestone:** Camera detects document edges, auto-crops and corrects perspective
+**Milestone:** Camera detects document edges, auto-crops and corrects perspective ✅
 
-**Key Decision:** ML Kit scanner vs custom. If ML Kit scanner is used, it provides its own camera UI — phases 1 and 2 merge significantly. If custom, we have full control but more work.
+**Implementation notes:**
+- `scanner_screen.dart` is now a transparent ML Kit launcher (shows spinner while ML Kit Activity is active)
+- `camera_service.dart` removed — ML Kit owns the camera
+- `galleryMode` param on `ScannerScreen` routes to ML Kit's gallery picker mode
+- Home screen AppBar has an "Import" icon that triggers gallery mode
+- Graceful fallback message shown if Google Play Services unavailable
 
 ---
 

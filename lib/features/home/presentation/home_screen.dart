@@ -12,6 +12,14 @@ class HomeScreen extends StatelessWidget {
         title: const Text('JustLens'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.photo_library_outlined),
+            tooltip: 'Import from gallery',
+            onPressed: () => context.push(
+              AppRoutes.scanner,
+              extra: {'gallery': true},
+            ),
+          ),
+          IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'Settings',
             onPressed: () => context.push(AppRoutes.settings),
@@ -52,7 +60,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Tap the Scan button to get started',
+            'Tap Scan or import from your gallery',
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
             ),

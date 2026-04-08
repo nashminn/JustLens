@@ -20,7 +20,11 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: AppRoutes.scanner,
-      builder: (context, state) => const ScannerScreen(),
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+        final galleryMode = extra?['gallery'] as bool? ?? false;
+        return ScannerScreen(galleryMode: galleryMode);
+      },
     ),
     GoRoute(
       path: AppRoutes.review,
